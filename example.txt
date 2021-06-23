@@ -1,0 +1,20 @@
+This is a test!
+password=ex@mplepassword
+password=******
+More test...
+
+steps
+
+1. clean-up
+2. setup
+3. checkout
+4. fmt
+5. static code analisis
+6. Security secrets
+7. init
+8. lint
+9. validate
+10. plan
+11. apply
+12. notify
+13. clean ws
