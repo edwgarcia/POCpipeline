@@ -1,0 +1,85 @@
+properties([
+    pipelineTriggers([
+        githubPush()
+    ])
+])
+
+node {
+    cleanUp()
+    checkout()
+    setUp()
+    fmt()
+    validate()
+    analysis()
+    plan()
+    //apply()
+    cleanUp()
+}
+
+//0. cleanup
+def cleanUp(){
+    stage("Clean Up"){
+        cleanWs()
+    }
+}
+
+//1. Checkout
+def checkout() {
+    stage('Checkout') {
+        checkout scm
+    }
+}
+
+//2. Setup
+
+def setUp(){
+    stage('Setup'){
+        sh "terraform init"
+    }
+}
+
+//3. Format
+
+def fmt(){
+    stage('Fmt'){
+        sh "terraform fmt -recursive"
+    }
+}
+
+//4. Validate
+def validate(){
+    stage('Validate'){
+        sh "terraform validate"
+    }
+}
+
+//5. Analisis estatico de codigo y lint
+
+def analysis(){
+    stage("Analysis"){
+        parallel('Static Code Analysis': {
+            stage('Static Code Analysis'){
+                sh "echo Analisis estatico de codigo"
+        }
+        },'Lint': {
+                stage('Lint'){        
+                    sh "echo lint check"
+                }
+        })
+    }
+}
+
+//6. Plan
+
+def plan(){
+    stage('Plan'){
+        sh "terraform plan"
+    }
+}
+
+//7. Apply
+def apply(){
+    stage('Apply'){
+        sh "terraform apply"
+    }
+}
